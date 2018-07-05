@@ -28,7 +28,7 @@ export default ({ config, db }) => {
 		// };
 		// conv.ask(new Permission(options));
 
-		console.log(req);
+		//console.log(req);
         var result = {
 			"fulfillmentText": "This is a text response",
 			"fulfillmentMessages": [
@@ -86,7 +86,7 @@ export default ({ config, db }) => {
 		  }
 
 		console.log(result);
-		res.send(result);
+		res.json(result);
 	});
 
 	api.post('/receive_location', (req,res) => {
