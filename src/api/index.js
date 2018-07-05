@@ -32,8 +32,8 @@ export default ({ config, db }) => {
 	});
 
 	api.post('/receive_location', (req,res) => {
-		const res = JSON.stringify(request.body.originalRequest.data.device.location);
-		console.log(res);
+		const ressult = JSON.stringify(request.body.originalRequest.data.device.location);
+		console.log(ressult);
 		//conv.add(res);
 		// const client = new twilio("AC93ece7e1de3cfdb21694e980b4de8878",
 		// "65645a7bddf212ffa046f9518ec16df5");

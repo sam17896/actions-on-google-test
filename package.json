@@ -28,9 +28,11 @@
   "author": "Jason Miller <jason@developit.ca>",
   "license": "MIT",
   "dependencies": {
+    "actions-on-google": "^2.2.0",
     "body-parser": "^1.13.3",
     "compression": "^1.5.2",
     "cors": "^2.7.1",
+    "dialogflow-fulfillment": "^0.4.1",
     "express": "^4.13.3",
     "morgan": "^1.8.0",
     "resource-router-middleware": "^0.6.0"
