@@ -28,7 +28,7 @@ export default ({ config, db }) => {
 		};
 		conv.ask(new Permission(options));
 
-		res.json(conv);
+		res.json({test:"thek hai"});
 	});
 
 	api.post('/receive_location', (req,res) => {
