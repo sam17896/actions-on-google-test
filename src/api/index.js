@@ -27,11 +27,22 @@ export default ({ config, db }) => {
 		// 	permissions: ['NAME', 'DEVICE_PRECISE_LOCATION'],
 		// };
 		// conv.ask(new Permission(options));
-        var result ={
-			speech: 'Something went wrong!',
-			displayText: 'Something went wrong!',
-			source: 'team info'
-		}
+        var result = {
+			"payload": {
+			  "google": {
+				"expectUserResponse": true,
+				"richResponse": {
+				  "items": [
+					{
+					  "simpleResponse": {
+						"textToSpeech": "this is a simple response"
+					  }
+					}
+				  ]
+				}
+			  }
+			}
+		  }
 		res.json(result);
 	});
 
