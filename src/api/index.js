@@ -118,7 +118,7 @@ export default ({ config, db }) => {
 			  })
 			break;
 
-			case 'recieve_location':
+			case 'receive_location':
 			  console.log(req.body.originalRequest.device.location);
 			  res.json({
 				"payload": {
@@ -128,7 +128,7 @@ export default ({ config, db }) => {
 						"items": [
 						  {
 							"simpleResponse": {
-							  "textToSpeech": "this is a simple response"
+							  "textToSpeech": "this is a simple response of receive location"
 							}
 						  }
 						]
