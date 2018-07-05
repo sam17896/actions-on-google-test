@@ -17,16 +17,16 @@ export default ({ config, db }) => {
 	});
 
 	api.post('/ask_for_location', (req,res)=>{
-		const agent = new WebhookClient({ req, res });
+		// const agent = new WebhookClient({ req, res });
 
-		const conv =  agent.conv();
+		// const conv =  agent.conv();
 
-		const options = {
-			context: 'To address you by name and know your location',
-			// Ask for more than one permission. User can authorize all or none.
-			permissions: ['NAME', 'DEVICE_PRECISE_LOCATION'],
-		};
-		conv.ask(new Permission(options));
+		// const options = {
+		// 	context: 'To address you by name and know your location',
+		// 	// Ask for more than one permission. User can authorize all or none.
+		// 	permissions: ['NAME', 'DEVICE_PRECISE_LOCATION'],
+		// };
+		// conv.ask(new Permission(options));
 
 		res.json({test:"thek hai"});
 	});
