@@ -96,22 +96,49 @@ export default ({ config, db }) => {
 	api.post('/', (req,res )=>{
 		console.log(req);
 
-		res.json({
-			"payload": {
-				"google": {
-				  "expectUserResponse": true,
-				  "richResponse": {
-					"items": [
-					  {
-						"simpleResponse": {
-						  "textToSpeech": "this is a simple response"
-						}
+		switch(req.body.queryResult.action){
+			case 'ask_for_location':
+			res.json({
+				"payload": {
+				  "google": {
+					"expectUserResponse": true,
+					"systemIntent": {
+					  "intent": "actions.intent.PERMISSION",
+					  "data": {
+						"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+						"optContext": "To deliver your order",
+						"permissions": [
+						  "NAME",
+						  "DEVICE_PRECISE_LOCATION"
+						]
 					  }
-					]
+					}
 				  }
 				}
-			}
-		});
+			  })
+			break;
+
+			default:
+			res.json({
+				"payload": {
+					"google": {
+					  "expectUserResponse": true,
+					  "richResponse": {
+						"items": [
+						  {
+							"simpleResponse": {
+							  "textToSpeech": "this is a simple response"
+							}
+						  }
+						]
+					  }
+					}
+				}
+			});
+			break;
+		}
+
+
 	});
 
 	return api;
