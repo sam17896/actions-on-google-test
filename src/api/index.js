@@ -62,7 +62,7 @@ export default ({ config, db }) => {
 		  };
 
 		console.log(result);
-		res.json(result);
+		res.send(result);
 	});
 
 	api.post('/receive_location', (req,res) => {
