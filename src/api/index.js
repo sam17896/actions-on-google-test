@@ -119,7 +119,7 @@ export default ({ config, db }) => {
 			break;
 
 			case 'receive_location':
-			  console.log(req.body.originalRequest.device.location);
+			  console.log(req.body.originalDetectIntentRequest.payload.device.location);
 			  res.json({
 				"payload": {
 					"google": {
