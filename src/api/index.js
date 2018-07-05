@@ -60,30 +60,10 @@ export default ({ config, db }) => {
 				  ]
 				}
 			  },
-			  "facebook": {
-				"text": "Hello, Facebook!"
-			  },
-			  "slack": {
-				"text": "This is a text response for Slack."
-			  }
-			},
-			"outputContexts": [
-			  {
-				"name": "projects/${PROJECT_ID}/agent/sessions/${SESSION_ID}/contexts/context name",
-				"lifespanCount": 5,
-				"parameters": {
-				  "param": "param value"
-				}
-			  }
-			],
-			"followupEventInput": {
-			  "name": "event name",
-			  "languageCode": "en-US",
-			  "parameters": {
-				"param": "param value"
-			  }
+
 			}
-		  }
+			}
+
 
 		console.log(result);
 		res.json(result);
