@@ -43,6 +43,8 @@ export default ({ config, db }) => {
 			  }
 			}
 		  }
+
+		  console.log(result);
 		res.json(result);
 	});
 
