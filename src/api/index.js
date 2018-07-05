@@ -93,5 +93,26 @@ export default ({ config, db }) => {
 
 	});
 
+	api.post('/', (req,res )=>{
+		console.log(req);
+
+		res.json({
+			"payload": {
+				"google": {
+				  "expectUserResponse": true,
+				  "richResponse": {
+					"items": [
+					  {
+						"simpleResponse": {
+						  "textToSpeech": "this is a simple response"
+						}
+					  }
+					]
+				  }
+				}
+			}
+		});
+	});
+
 	return api;
 }
