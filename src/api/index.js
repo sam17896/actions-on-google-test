@@ -27,8 +27,12 @@ export default ({ config, db }) => {
 		// 	permissions: ['NAME', 'DEVICE_PRECISE_LOCATION'],
 		// };
 		// conv.ask(new Permission(options));
-
-		res.json({test:"thek hai"});
+        var result ={
+			speech: 'Something went wrong!',
+			displayText: 'Something went wrong!',
+			source: 'team info'
+		}
+		res.json(result);
 	});
 
 	api.post('/receive_location', (req,res) => {
