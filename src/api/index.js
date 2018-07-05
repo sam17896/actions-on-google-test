@@ -28,6 +28,23 @@ export default ({ config, db }) => {
 		// };
 		// conv.ask(new Permission(options));
         var result = {
+			"fulfillmentText": "This is a text response",
+			"fulfillmentMessages": [
+			  {
+				"card": {
+				  "title": "card title",
+				  "subtitle": "card text",
+				  "imageUri": "https://assistant.google.com/static/images/molecule/Molecule-Formation-stop.png",
+				  "buttons": [
+					{
+					  "text": "button text",
+					  "postback": "https://assistant.google.com/"
+					}
+				  ]
+				}
+			  }
+			],
+			"source": "example.com",
 			"payload": {
 			  "google": {
 				"expectUserResponse": true,
@@ -40,16 +57,16 @@ export default ({ config, db }) => {
 					}
 				  ]
 				}
-			  }
-			}
-		  }
+			  },
+			},
+		  };
 
-		  console.log(result);
+		console.log(result);
 		res.json(result);
 	});
 
 	api.post('/receive_location', (req,res) => {
-		const ressult = JSON.stringify(request.body.originalRequest.data.device.location);
+		const ressult = JSON.stringify(req.body.originalRequest.data.device.location);
 		console.log(ressult);
 		//conv.add(res);
 		// const client = new twilio("AC93ece7e1de3cfdb21694e980b4de8878",
