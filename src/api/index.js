@@ -118,6 +118,26 @@ export default ({ config, db }) => {
 			  })
 			break;
 
+			case 'recieve_location':
+			  console.log(req);
+			  res.json({
+				"payload": {
+					"google": {
+					  "expectUserResponse": true,
+					  "richResponse": {
+						"items": [
+						  {
+							"simpleResponse": {
+							  "textToSpeech": "this is a simple response"
+							}
+						  }
+						]
+					  }
+					}
+				}
+			});
+			break;
+
 			default:
 			res.json({
 				"payload": {
