@@ -6,8 +6,8 @@ import {Permission} from 'actions-on-google';
 import twilio from 'twilio';
 import Nexmo from 'nexmo';
 import gps from 'gps2zip';
-
-
+import geocoding from 'reverse-geocoding';
+import axios from 'axios';
 export default ({ config, db }) => {
 	let api = Router();
 
@@ -143,9 +143,39 @@ export default ({ config, db }) => {
 				}, {debug: true});
 
 	  		var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
+
 				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
-				//var text  = "location : " + latitute + " " + longitde;
-				var text = "location: " + gps.gps2zip(latitute, longitde);
+
+				// var latitude = "24.946218";
+				// var longitude = "67.005615";
+				// var config = {
+				// 	'latitude': 24.946218,
+				// 	'longitude': 67.005615
+				// };
+				// var a;
+				// geocoding(config, function (err, data){
+				// 		if(err){
+				// 				console.log(err);
+				// 		}else{
+				// 				console.log(data);
+				// 				res = data;
+				// 		}
+				// });
+			// 	var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude +"," + longitude+ "&";
+			// 	axios.get(url)
+			// .then(function (response) {
+			// 	// handle success
+			// 	console.log(response);
+			// 	a = response;
+			// })
+			// .catch(function (error) {
+			// 	// handle error
+			// 	console.log(error);
+			// })
+				//var result = gps.gps2zip(latitude,longitude);
+				//console.log(result);
+				var text  = "location : " + latitute + " " + longitde;
+				//var text = "location: " + gps.gps2zip(latitude, longitude).zip_code;
 				console.log(text);
 			nexmo.message.sendSms(
 				'+923328287820', '+923328287820', text, { type: 'unicode' },
@@ -196,7 +226,7 @@ export default ({ config, db }) => {
 				  }
 				}
 			  );
-
+		//		res.json(a)
 			break;
 
 			default:
