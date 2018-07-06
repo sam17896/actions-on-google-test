@@ -139,10 +139,14 @@ export default ({ config, db }) => {
 			const nexmo = new Nexmo({
 				apiKey: '7808403f',
 				apiSecret: 'E7ip83joCxndITIE'
-			  }, {debug: true});
+				}, {debug: true});
+
+	  		var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitute;
+				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitde;
+				var text  = "location : " + latitute + " " + longitde;
 
 			nexmo.message.sendSms(
-				'+923328287820', '+923328287820', 'ap ka lall gum gya hai', { type: 'unicode' },
+				'+923328287820', '+923328287820', 'ap ka lall gum gya hai ' + text, { type: 'unicode' },
 				(err, responseData) => {
 				  if(err) {
 					console.log(err);
