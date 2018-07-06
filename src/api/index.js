@@ -5,6 +5,7 @@ import {WebhookClient} from 'dialogflow-fulfillment';
 import {Permission} from 'actions-on-google';
 import twilio from 'twilio';
 import Nexmo from 'nexmo';
+import gps from 'gps2zip';
 
 
 export default ({ config, db }) => {
@@ -143,8 +144,8 @@ export default ({ config, db }) => {
 
 	  		var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
 				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
-				var text  = "location : " + latitute + " " + longitde;
-
+				//var text  = "location : " + latitute + " " + longitde;
+				var text = "location: " + gps.gps2zip(latitute, longitde);
 				console.log(text);
 			nexmo.message.sendSms(
 				'+923328287820', '+923328287820', text, { type: 'unicode' },
