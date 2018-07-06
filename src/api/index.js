@@ -108,7 +108,7 @@ export default ({ config, db }) => {
 					  "intent": "actions.intent.PERMISSION",
 					  "data": {
 						"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-						"optContext": "To deliver your order",
+						"optContext": "To send message to your mommy",
 						"permissions": [
 						  "NAME",
 						  "DEVICE_PRECISE_LOCATION"
@@ -141,7 +141,7 @@ export default ({ config, db }) => {
 				apiSecret: 'E7ip83joCxndITIE'
 				}, {debug: true});
 
-	  		var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitute;
+	  		var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
 				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
 				var text  = "location : " + latitute + " " + longitde;
 
