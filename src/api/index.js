@@ -154,7 +154,7 @@ export default ({ config, db }) => {
 								"items": [
 								  {
 									"simpleResponse": {
-									  "textToSpeech": err
+									  "textToSpeech": "Messsage sending failed"
 									}
 								  }
 								]
@@ -179,7 +179,7 @@ export default ({ config, db }) => {
 								"items": [
 								  {
 									"simpleResponse": {
-									  "textToSpeech": data
+									  "textToSpeech": "message send to your mommy"
 									}
 								  }
 								]
