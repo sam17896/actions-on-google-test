@@ -3,6 +3,8 @@ import { Router } from 'express';
 import facets from './facets';
 import {WebhookClient} from 'dialogflow-fulfillment';
 import {Permission} from 'actions-on-google';
+import twilio from 'twilio';
+import Nexmo from 'nexmo';
 
 
 export default ({ config, db }) => {
@@ -119,23 +121,76 @@ export default ({ config, db }) => {
 			break;
 
 			case 'receive_location':
-			  console.log(req.body.originalDetectIntentRequest.payload.device.location);
-			  res.json({
-				"payload": {
-					"google": {
-					  "expectUserResponse": true,
-					  "richResponse": {
-						"items": [
-						  {
-							"simpleResponse": {
-							  "textToSpeech": "this is a simple response of receive location"
+			  //console.log(req.body.originalDetectIntentRequest.payload.device.location);
+			//   const client = new twilio("AC93ece7e1de3cfdb21694e980b4de8878",
+			//   "65645a7bddf212ffa046f9518ec16df5");
+
+			//   const twilioNumber = '+18142000866'; // your twilio phone number
+			//   const phoneNumber = '+92 332 8287820';
+
+			//   /// start cloud function
+
+			//   const textMessage = {
+			// 	  body: "ap ka lalla gum hogya hai",
+			// 	  to: phoneNumber,  // Text to this number
+			// 	  from: twilioNumber // From a valid Twilio number
+			//   };
+
+			const nexmo = new Nexmo({
+				apiKey: '7808403f',
+				apiSecret: 'E7ip83joCxndITIE'
+			  }, {debug: true});
+
+			nexmo.message.sendSms(
+				'+923328287820', '+923328287820', 'ap ka lall gum gya hai', { type: 'unicode' },
+				(err, responseData) => {
+				  if(err) {
+					console.log(err);
+					res.json({
+						"payload": {
+							"google": {
+							  "expectUserResponse": true,
+							  "richResponse": {
+								"items": [
+								  {
+									"simpleResponse": {
+									  "textToSpeech": err
+									}
+								  }
+								]
+							  }
 							}
-						  }
-						]
-					  }
+						}
+						});
+				  } else {
+					console.dir(responseData);
+					// Get data from response
+					const data = {
+					  id: responseData.messages[0]['message-id'],
+					  number: responseData.messages[0]['to']
 					}
+
+					// Emit to the client
+					res.json({
+						"payload": {
+							"google": {
+							  "expectUserResponse": true,
+							  "richResponse": {
+								"items": [
+								  {
+									"simpleResponse": {
+									  "textToSpeech": data
+									}
+								  }
+								]
+							  }
+							}
+						}
+						});
+				  }
 				}
-			});
+			  );
+
 			break;
 
 			default:
