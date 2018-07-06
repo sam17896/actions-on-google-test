@@ -142,11 +142,12 @@ export default ({ config, db }) => {
 				}, {debug: true});
 
 	  		var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitute;
-				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitde;
+				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
 				var text  = "location : " + latitute + " " + longitde;
 
+				console.log(text);
 			nexmo.message.sendSms(
-				'+923328287820', '+923328287820', 'ap ka lall gum gya hai ' + text, { type: 'unicode' },
+				'+923328287820', '+923328287820', text, { type: 'unicode' },
 				(err, responseData) => {
 				  if(err) {
 					console.log(err);
