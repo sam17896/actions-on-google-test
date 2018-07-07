@@ -109,54 +109,71 @@ export default ({ config, db }) => {
 				axios.get(url).then((resp)=>{
 					console.log(resp.data.results[0].locations[0].postalCode)
 					text = "Zip Code: " +  resp.data.results[0].locations[0].postalCode;
-				}).catch((err)=>console.log(err));
 
-				nexmo.message.sendSms(
-				'+923328287820', '+923328287820', text, { type: 'unicode' },
-				(err, responseData) => {
-				  if(err) {
-					console.log(err);
-					res.json({
-						"payload": {
-							"google": {
-							  "expectUserResponse": true,
-							  "richResponse": {
-								"items": [
-								  {
-									"simpleResponse": {
-									  "textToSpeech": "Messsage sending failed"
+					nexmo.message.sendSms(
+						'+923328287820', '+923328287820', text, { type: 'unicode' },
+						(err, responseData) => {
+							if(err) {
+							console.log(err);
+							res.json({
+								"payload": {
+									"google": {
+										"expectUserResponse": true,
+										"richResponse": {
+										"items": [
+											{
+											"simpleResponse": {
+												"textToSpeech": "Messsage sending failed"
+											}
+											}
+										]
+										}
 									}
-								  }
-								]
-							  }
+								}
+								});
+							} else {
+							const data = {
+								id: responseData.messages[0]['message-id'],
+								number: responseData.messages[0]['to']
+							}
+
+							// Emit to the client
+							res.json({
+								"payload": {
+									"google": {
+										"expectUserResponse": true,
+										"richResponse": {
+										"items": [
+											{
+											"simpleResponse": {
+												"textToSpeech": "Message send to your mommy"
+											}
+											}
+										]
+										}
+									}
+								}
+								});
+							}
+						});
+
+				}).catch((err)=>{res.json({
+					"payload": {
+						"google": {
+							"expectUserResponse": true,
+							"richResponse": {
+							"items": [
+								{
+								"simpleResponse": {
+									"textToSpeech": "Sorry I couldn't get that"
+								}
+								}
+							]
 							}
 						}
-						});
-				  } else {
-					const data = {
-					  id: responseData.messages[0]['message-id'],
-					  number: responseData.messages[0]['to']
 					}
-
-					// Emit to the client
-					res.json({
-						"payload": {
-							"google": {
-							  "expectUserResponse": true,
-							  "richResponse": {
-								"items": [
-								  {
-									"simpleResponse": {
-									  "textToSpeech": "Message send to your mommy"
-									}
-								  }
-								]
-							  }
-							}
-						}
-						});
-				  }
 				});
+			});
 			//	res.json(text);
 			break;
 
