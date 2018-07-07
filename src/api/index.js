@@ -8,6 +8,7 @@ const DEFAULT_INTENT = "welcome";
 const QUIT_INTENT = "exit";
 const ASK_LOCATION_INTENT = "ask_for_location";
 const RECEIVE_LOCATION_INTENT = "receive_location";
+const SEND_MESSAGE = "ReceiveLocation.ReceiveLocation-custom";
 
 const nexmo_api_key = "7808403f";
 const nexmo_api_secret = "E7ip83joCxndITIE";
@@ -91,6 +92,25 @@ export default ({ config, db }) => {
 			break;
 
 			case RECEIVE_LOCATION_INTENT:
+			//	res.json(text);
+
+			res.json({"payload": {
+				"google": {
+					"expectUserResponse": true,
+					"richResponse": {
+					"items": [
+						{
+						"simpleResponse": {
+							"textToSpeech": "Sorry I couldn't get that"
+						}
+						}
+					]
+					}
+				}
+			}});
+			break;
+
+			case SEND_MESSAGE:
 			const nexmo = new Nexmo({
 				apiKey: nexmo_api_key,
 				apiSecret: nexmo_api_secret
@@ -174,7 +194,8 @@ export default ({ config, db }) => {
 					}
 				});
 			});
-			//	res.json(text);
+
+
 			break;
 
 			default:
