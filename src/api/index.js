@@ -94,27 +94,27 @@ export default ({ config, db }) => {
 				// 	}
 
 				// 	// Emit to the client
-				// 	res.json({
-				// 		"payload": {
-				// 			"google": {
-				// 			  "expectUserResponse": true,
-				// 			  "richResponse": {
-				// 				"items": [
-				// 				  {
-				// 					"simpleResponse": {
-				// 					  "textToSpeech": "message send to your mommy"
-				// 					}
-				// 				  }
-				// 				]
-				// 			  }
-				// 			}
-				// 		}
-				// 		});
+					res.json({
+						"payload": {
+							"google": {
+							  "expectUserResponse": true,
+							  "richResponse": {
+								"items": [
+								  {
+									"simpleResponse": {
+									  "textToSpeech": "message send to your mommy"
+									}
+								  }
+								]
+							  }
+							}
+						}
+						});
 				//   }
-				//}
-				//);
+				// }
+				// );
 
-				res.json(text);
+			//	res.json(text);
 			break;
 
 			default:
