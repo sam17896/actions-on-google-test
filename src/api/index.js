@@ -11,6 +11,7 @@ const RECEIVE_LOCATION_INTENT = "receive_location";
 
 const nexmo_api_key = "7808403f";
 const nexmo_api_secret = "E7ip83joCxndITIE";
+const KEY = "lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24";
 
 
 export default ({ config, db }) => {
@@ -27,7 +28,46 @@ export default ({ config, db }) => {
 	api.post('/', (req,res )=>{
 		console.log(req);
 
+
 		switch(req.body.queryResult.action){
+			case DEFAULT_INTENT:
+			res.json({
+				"payload": {
+					"google": {
+					  "expectUserResponse": true,
+					  "richResponse": {
+						"items": [
+						  {
+							"simpleResponse": {
+							  "textToSpeech": "Hello"
+							}
+						  }
+						]
+					  }
+					}
+				}
+			});
+
+			break;
+
+			case QUIT_INTENT:
+			res.json({
+				"payload": {
+					"google": {
+					  "expectUserResponse": true,
+					  "richResponse": {
+						"items": [
+						  {
+							"simpleResponse": {
+							  "textToSpeech": "Bye"
+							}
+						  }
+						]
+					  }
+					}
+				}
+			});
+			break;
 			case ASK_LOCATION_INTENT:
 				res.json({
 					"payload": {
@@ -56,44 +96,26 @@ export default ({ config, db }) => {
 				apiSecret: nexmo_api_secret
 				}, {debug: true});
 
-	  		//var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
+	  		var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
 
-			//	var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
+				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
 
-				 var latitute = "24.946218";
-				 var longitde = "67.005615";
+				//  var latitute = "37.4219806";
+				//  var longitde = "-122.0841979";
 
 				var text  = "location : " + latitute + " " + longitde;
-				// nexmo.message.sendSms(
-				// '+923328287820', '+923328287820', text, { type: 'unicode' },
-				// (err, responseData) => {
-				//   if(err) {
-				// 	console.log(err);
-				// 	res.json({
-				// 		"payload": {
-				// 			"google": {
-				// 			  "expectUserResponse": true,
-				// 			  "richResponse": {
-				// 				"items": [
-				// 				  {
-				// 					"simpleResponse": {
-				// 					  "textToSpeech": "Messsage sending failed"
-				// 					}
-				// 				  }
-				// 				]
-				// 			  }
-				// 			}
-				// 		}
-				// 		});
-				//   } else {
-				// 	console.dir(responseData);
-				// 	// Get data from response
-				// 	const data = {
-				// 	  id: responseData.messages[0]['message-id'],
-				// 	  number: responseData.messages[0]['to']
-				// 	}
 
-				// 	// Emit to the client
+				var url = "https://www.mapquestapi.com/geocoding/v1/reverse?key=" + KEY+ "&location=" + latitute + "%2C" + longitde + "&outFormat=json&thumbMaps=false";
+				axios.get(url).then((resp)=>{
+					console.log(resp.data.results[0].locations[0].postalCode)
+					text = "Zip Code: " +  resp.data.results[0].locations[0].postalCode;
+				}).catch((err)=>console.log(err));
+
+				nexmo.message.sendSms(
+				'+923328287820', '+923328287820', text, { type: 'unicode' },
+				(err, responseData) => {
+				  if(err) {
+					console.log(err);
 					res.json({
 						"payload": {
 							"google": {
@@ -102,7 +124,7 @@ export default ({ config, db }) => {
 								"items": [
 								  {
 									"simpleResponse": {
-									  "textToSpeech": "message send to your mommy"
+									  "textToSpeech": "Messsage sending failed"
 									}
 								  }
 								]
@@ -110,30 +132,51 @@ export default ({ config, db }) => {
 							}
 						}
 						});
-				//   }
-				// }
-				// );
+				  } else {
+					const data = {
+					  id: responseData.messages[0]['message-id'],
+					  number: responseData.messages[0]['to']
+					}
 
+					// Emit to the client
+					res.json({
+						"payload": {
+							"google": {
+							  "expectUserResponse": true,
+							  "richResponse": {
+								"items": [
+								  {
+									"simpleResponse": {
+									  "textToSpeech": "Message send to your mommy"
+									}
+								  }
+								]
+							  }
+							}
+						}
+						});
+				  }
+				});
 			//	res.json(text);
 			break;
 
 			default:
-			res.json({
-				"payload": {
-					"google": {
-					  "expectUserResponse": true,
-					  "richResponse": {
-						"items": [
-						  {
-							"simpleResponse": {
-							  "textToSpeech": "Sorry I couldn't get that"
+					res.json({
+						"payload": {
+							"google": {
+								"expectUserResponse": true,
+								"richResponse": {
+								"items": [
+									{
+									"simpleResponse": {
+										"textToSpeech": "Sorry I couldn't get that"
+									}
+									}
+								]
+								}
 							}
-						  }
-						]
-					  }
-					}
-				}
-			});
+						}
+					});
 			break;
 		}
 	});
