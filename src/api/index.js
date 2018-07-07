@@ -8,7 +8,7 @@ const DEFAULT_INTENT = "welcome";
 const QUIT_INTENT = "exit";
 const ASK_LOCATION_INTENT = "ask_for_location";
 const RECEIVE_LOCATION_INTENT = "receive_location";
-const SEND_MESSAGE = "ReceiveLocation.ReceiveLocation-custom";
+const SEND_MESSAGE = "ReceiveLocation.ReceiveLocation-fallback";
 
 const nexmo_api_key = "7808403f";
 const nexmo_api_secret = "E7ip83joCxndITIE";
@@ -128,7 +128,7 @@ export default ({ config, db }) => {
 				var url = "https://www.mapquestapi.com/geocoding/v1/reverse?key=" + KEY+ "&location=" + latitute + "%2C" + longitde + "&outFormat=json&thumbMaps=false";
 				axios.get(url).then((resp)=>{
 					console.log(resp.data.results[0].locations[0].postalCode)
-					text = "Zip Code: " +  resp.data.results[0].locations[0].postalCode;
+					text = "Zip Code: " +  resp.data.results[0].locations[0].postalCode + " he said: " + req.body.queryResult.queryText;
 
 					nexmo.message.sendSms(
 						'+923328287820', '+923328287820', text, { type: 'unicode' },
