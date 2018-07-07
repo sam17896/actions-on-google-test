@@ -1,13 +1,18 @@
 import { version } from '../../package.json';
 import { Router } from 'express';
 import facets from './facets';
-import {WebhookClient} from 'dialogflow-fulfillment';
-import {Permission} from 'actions-on-google';
-import twilio from 'twilio';
 import Nexmo from 'nexmo';
-import gps from 'gps2zip';
-import geocoding from 'reverse-geocoding';
 import axios from 'axios';
+
+const DEFAULT_INTENT = "welcome";
+const QUIT_INTENT = "exit";
+const ASK_LOCATION_INTENT = "ask_for_location";
+const RECEIVE_LOCATION_INTENT = "receive_location";
+
+const nexmo_api_key = "7808403f";
+const nexmo_api_secret = "E7ip83joCxndITIE";
+
+
 export default ({ config, db }) => {
 	let api = Router();
 
@@ -19,214 +24,97 @@ export default ({ config, db }) => {
 		res.json({ version });
 	});
 
-	api.post('/ask_for_location', (req,res)=>{
-		// const agent = new WebhookClient({ req, res });
-
-		// const conv =  agent.conv();
-
-		// const options = {
-		// 	context: 'To address you by name and know your location',
-		// 	// Ask for more than one permission. User can authorize all or none.
-		// 	permissions: ['NAME', 'DEVICE_PRECISE_LOCATION'],
-		// };
-		// conv.ask(new Permission(options));
-
-		//console.log(req);
-        var result = {
-			"fulfillmentText": "This is a text response",
-			"fulfillmentMessages": [
-			  {
-				"card": {
-				  "title": "card title",
-				  "subtitle": "card text",
-				  "imageUri": "https://assistant.google.com/static/images/molecule/Molecule-Formation-stop.png",
-				  "buttons": [
-					{
-					  "text": "button text",
-					  "postback": "https://assistant.google.com/"
-					}
-				  ]
-				}
-			  }
-			],
-			"source": "example.com",
-			"payload": {
-			  "google": {
-				"expectUserResponse": true,
-				"richResponse": {
-				  "items": [
-					{
-					  "simpleResponse": {
-						"textToSpeech": "this is a simple response"
-					  }
-					}
-				  ]
-				}
-			  },
-
-			}
-			}
-
-
-		console.log(result);
-		res.json(result);
-	});
-
-	api.post('/receive_location', (req,res) => {
-		const ressult = JSON.stringify(req.body.originalRequest.data.device.location);
-		console.log(ressult);
-		//conv.add(res);
-		// const client = new twilio("AC93ece7e1de3cfdb21694e980b4de8878",
-		// "65645a7bddf212ffa046f9518ec16df5");
-
-		// const twilioNumber = '+18142000866'; // your twilio phone number
-		// const phoneNumber = '+923322896908';
-
-		// /// start cloud function
-
-		// const textMessage = {
-		// 	body: `test`,
-		// 	to: phoneNumber,  // Text to this number
-		// 	from: twilioNumber // From a valid Twilio number
-		// };
-
-		// client.messages.create(textMessage);
-
-		// conv.add(res, "textMessage");
-
-	});
-
 	api.post('/', (req,res )=>{
 		console.log(req);
 
 		switch(req.body.queryResult.action){
-			case 'ask_for_location':
-			res.json({
-				"payload": {
-				  "google": {
-					"expectUserResponse": true,
-					"systemIntent": {
-					  "intent": "actions.intent.PERMISSION",
-					  "data": {
-						"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-						"optContext": "To send message to your mommy",
-						"permissions": [
-						  "NAME",
-						  "DEVICE_PRECISE_LOCATION"
-						]
-					  }
+			case ASK_LOCATION_INTENT:
+				res.json({
+					"payload": {
+						"google": {
+						"expectUserResponse": true,
+						"systemIntent": {
+							"intent": "actions.intent.PERMISSION",
+							"data": {
+							"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+							"optContext": "To inform your mummy",
+							"permissions": [
+								"NAME",
+								"DEVICE_PRECISE_LOCATION",
+								"DEVICE_COARSE_LOCATION	"
+							]
+							}
+						}
+						}
 					}
-				  }
-				}
-			  })
+					})
 			break;
 
-			case 'receive_location':
-			  //console.log(req.body.originalDetectIntentRequest.payload.device.location);
-			//   const client = new twilio("AC93ece7e1de3cfdb21694e980b4de8878",
-			//   "65645a7bddf212ffa046f9518ec16df5");
-
-			//   const twilioNumber = '+18142000866'; // your twilio phone number
-			//   const phoneNumber = '+92 332 8287820';
-
-			//   /// start cloud function
-
-			//   const textMessage = {
-			// 	  body: "ap ka lalla gum hogya hai",
-			// 	  to: phoneNumber,  // Text to this number
-			// 	  from: twilioNumber // From a valid Twilio number
-			//   };
-
+			case RECEIVE_LOCATION_INTENT:
 			const nexmo = new Nexmo({
-				apiKey: '7808403f',
-				apiSecret: 'E7ip83joCxndITIE'
+				apiKey: nexmo_api_key,
+				apiSecret: nexmo_api_secret
 				}, {debug: true});
 
-	  		var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
+	  		//var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
 
-				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
+			//	var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
 
-				// var latitude = "24.946218";
-				// var longitude = "67.005615";
-				// var config = {
-				// 	'latitude': 24.946218,
-				// 	'longitude': 67.005615
-				// };
-				// var a;
-				// geocoding(config, function (err, data){
-				// 		if(err){
-				// 				console.log(err);
-				// 		}else{
-				// 				console.log(data);
-				// 				res = data;
-				// 		}
-				// });
-			// 	var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude +"," + longitude+ "&";
-			// 	axios.get(url)
-			// .then(function (response) {
-			// 	// handle success
-			// 	console.log(response);
-			// 	a = response;
-			// })
-			// .catch(function (error) {
-			// 	// handle error
-			// 	console.log(error);
-			// })
-				//var result = gps.gps2zip(latitude,longitude);
-				//console.log(result);
+				 var latitute = "24.946218";
+				 var longitde = "67.005615";
+
 				var text  = "location : " + latitute + " " + longitde;
-				//var text = "location: " + gps.gps2zip(latitude, longitude).zip_code;
-				console.log(text);
-			nexmo.message.sendSms(
-				'+923328287820', '+923328287820', text, { type: 'unicode' },
-				(err, responseData) => {
-				  if(err) {
-					console.log(err);
-					res.json({
-						"payload": {
-							"google": {
-							  "expectUserResponse": true,
-							  "richResponse": {
-								"items": [
-								  {
-									"simpleResponse": {
-									  "textToSpeech": "Messsage sending failed"
-									}
-								  }
-								]
-							  }
-							}
-						}
-						});
-				  } else {
-					console.dir(responseData);
-					// Get data from response
-					const data = {
-					  id: responseData.messages[0]['message-id'],
-					  number: responseData.messages[0]['to']
-					}
+				// nexmo.message.sendSms(
+				// '+923328287820', '+923328287820', text, { type: 'unicode' },
+				// (err, responseData) => {
+				//   if(err) {
+				// 	console.log(err);
+				// 	res.json({
+				// 		"payload": {
+				// 			"google": {
+				// 			  "expectUserResponse": true,
+				// 			  "richResponse": {
+				// 				"items": [
+				// 				  {
+				// 					"simpleResponse": {
+				// 					  "textToSpeech": "Messsage sending failed"
+				// 					}
+				// 				  }
+				// 				]
+				// 			  }
+				// 			}
+				// 		}
+				// 		});
+				//   } else {
+				// 	console.dir(responseData);
+				// 	// Get data from response
+				// 	const data = {
+				// 	  id: responseData.messages[0]['message-id'],
+				// 	  number: responseData.messages[0]['to']
+				// 	}
 
-					// Emit to the client
-					res.json({
-						"payload": {
-							"google": {
-							  "expectUserResponse": true,
-							  "richResponse": {
-								"items": [
-								  {
-									"simpleResponse": {
-									  "textToSpeech": "message send to your mommy"
-									}
-								  }
-								]
-							  }
-							}
-						}
-						});
-				  }
-				}
-			  );
-		//		res.json(a)
+				// 	// Emit to the client
+				// 	res.json({
+				// 		"payload": {
+				// 			"google": {
+				// 			  "expectUserResponse": true,
+				// 			  "richResponse": {
+				// 				"items": [
+				// 				  {
+				// 					"simpleResponse": {
+				// 					  "textToSpeech": "message send to your mommy"
+				// 					}
+				// 				  }
+				// 				]
+				// 			  }
+				// 			}
+				// 		}
+				// 		});
+				//   }
+				//}
+				//);
+
+				res.json(text);
 			break;
 
 			default:
@@ -238,7 +126,7 @@ export default ({ config, db }) => {
 						"items": [
 						  {
 							"simpleResponse": {
-							  "textToSpeech": "this is a simple response"
+							  "textToSpeech": "Sorry I couldn't get that"
 							}
 						  }
 						]
@@ -248,8 +136,6 @@ export default ({ config, db }) => {
 			});
 			break;
 		}
-
-
 	});
 
 	return api;
