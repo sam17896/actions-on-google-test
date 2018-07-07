@@ -41,7 +41,7 @@ export default ({ config, db }) => {
 							"permissions": [
 								"NAME",
 								"DEVICE_PRECISE_LOCATION",
-								"DEVICE_COARSE_LOCATION	"
+								"DEVICE_COARSE_LOCATION"
 							]
 							}
 						}
