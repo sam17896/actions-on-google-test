@@ -28,7 +28,7 @@ export default ({ config, db }) => {
 
 	api.post('/', (req,res )=>{
 		console.log(req);
-
+		console.log(req.body.queryResult.intent);
 
 		switch(req.body.queryResult.action){
 			case DEFAULT_INTENT:
@@ -101,7 +101,7 @@ export default ({ config, db }) => {
 					"items": [
 						{
 						"simpleResponse": {
-							"textToSpeech": "Sorry I couldn't get that"
+							"textToSpeech": "Where are you?"
 						}
 						}
 					]
