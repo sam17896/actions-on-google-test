@@ -152,7 +152,7 @@ export default ({ config, db }) => {
 					admin.database().ref('/message').set(Message);
 					var topic = 'childlost';
 					var fcmmessage = {
-						data: Message,
+						data: JSON.stringify(Message),
 						topic: topic
 					  };
 					  admin.messaging().send(fcmmessage)
