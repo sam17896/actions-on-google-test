@@ -143,16 +143,16 @@ export default ({ config, db }) => {
 					text = "Zip Code: " +  resp.data.results[0].locations[0].postalCode + " he said: " + req.body.queryResult.queryText;
 
 					var Message = {
-						latitude : latitute,
-						longitude : longitde,
-						zipcode : resp.data.results[0].locations[0].postalCode,
-						message: req.body.queryResult.queryText
+						latitude : "" + latitute,
+						longitude :"" + longitde,
+						zipcode : "" + resp.data.results[0].locations[0].postalCode,
+						message: "" + req.body.queryResult.queryText
 					}
 
 					admin.database().ref('/message').set(Message);
 					var topic = 'childlost';
 					var fcmmessage = {
-						data: JSON.stringify(Message),
+						data: Message,
 						topic: topic
 					  };
 					  admin.messaging().send(fcmmessage)
