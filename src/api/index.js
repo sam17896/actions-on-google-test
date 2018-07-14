@@ -5,6 +5,7 @@ import Nexmo from 'nexmo';
 import axios from 'axios';
 import * as admin from 'firebase-admin';
 import FCM  from 'fcm-push';
+import { values } from 'actions-on-google/dist/common';
 
 
 
@@ -41,13 +42,11 @@ export default ({ config, db }) => {
 	});
 
 	api.post('/', (req,res )=>{
-		console.log(req);
-		console.log(req.body.queryResult.intent);
 
 		switch(req.body.queryResult.action){
 			case DEFAULT_INTENT:
 			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
-			admin.database().ref("/users").equalTo(user_id).on("value", function(snapshot) {
+			admin.database().ref("/users/" + user_id).once("value", function(snapshot) {
 				if(snapshot.exists()){
 					res.json({
 						"payload": {
@@ -84,13 +83,11 @@ export default ({ config, db }) => {
 					});
 				}
 			});
-
 			break;
 
 			case MOTHER_NUMBER:
 
 			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
-			console.log(user_id);
 			var number = {
 				key : req.body.queryResult.queryText
 			}
@@ -184,8 +181,8 @@ export default ({ config, db }) => {
 
 				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
 
-//				 var latitute = "37.4219806";
-//				 var longitde = "-122.0841979";
+				//  var latitute = "37.4219806";
+				//  var longitde = "-122.0841979";
 
 				var text  = "location : " + latitute + " " + longitde;
 
@@ -193,133 +190,138 @@ export default ({ config, db }) => {
 				axios.get(url).then((resp)=>{
 					console.log(resp.data.results[0].locations[0].postalCode)
 					text = "Zip Code: " +  resp.data.results[0].locations[0].postalCode + " he said: " + req.body.queryResult.queryText;
+					admin.database().ref('/users/' + "ABwppHHHGlEs8drH2p3CuY6r9VtvR9DesWi-6b5UKDcaCcfESAZSzQyzjdRP95HG_HWJApGD55g9XxrKYTwP")
+					.on("value", function(snapshot){
+						var number = snapshot.val().key;
+						var Message = {
+							latitude : "" + latitute,
+							longitude :"" + longitde,
+							zipcode : "" + resp.data.results[0].locations[0].postalCode,
+							message: "" + req.body.queryResult.queryText,
+							to: "" + number
+						}
 
-					var Message = {
-						latitude : "" + latitute,
-						longitude :"" + longitde,
-						zipcode : "" + resp.data.results[0].locations[0].postalCode,
-						message: "" + req.body.queryResult.queryText
-					}
-
-					admin.database().ref('/message').set(Message);
-					var topic = 'childlost';
-					var fcmmessage = {
-						data: Message,
-						topic: topic
-					  };
-					  admin.messaging().send(fcmmessage)
-						.then((response) => {
-							// Response is a message ID string.
-							res.json({
-								"payload": {
-									"google": {
-										"expectUserResponse": true,
-										"richResponse": {
-										"items": [
-											{
-											"simpleResponse": {
-												"textToSpeech": "Message send to your mommy"
+						admin.database().ref('/message').set(Message);
+						var topic = 'childlost';
+						var fcmmessage = {
+							data: Message,
+							topic: topic
+						  };
+						  admin.messaging().send(fcmmessage)
+							.then((response) => {
+								// Response is a message ID string.
+								res.json({
+									"payload": {
+										"google": {
+											"expectUserResponse": true,
+											"richResponse": {
+											"items": [
+												{
+												"simpleResponse": {
+													"textToSpeech": "Message send to your mommy"
+												}
+												}
+											]
 											}
-											}
-										]
 										}
 									}
-								}
-								});
-							console.log('Successfully sent message:', response);
-						})
-						.catch((error) => {
-							console.log('Error sending message:', error);
-						});
-					//console.log(admin.database().ref('/message'));
-					// var fcmmessage = {
-					// 	to: 'childlost', // required fill with device token or topics
-					// 	collapse_key: 'your_collapse_key',
-					// 	data: Message,
-					// 	notification: {
-					// 		title: 'Title of your push notification',
-					// 		body: 'Body of your push notification'
-					// 	}
-					// };
+									});
+								console.log('Successfully sent message:', response);
+							})
+							.catch((error) => {
+								console.log('Error sending message:', error);
+							});
+						//console.log(admin.database().ref('/message'));
+						// var fcmmessage = {
+						// 	to: 'childlost', // required fill with device token or topics
+						// 	collapse_key: 'your_collapse_key',
+						// 	data: Message,
+						// 	notification: {
+						// 		title: 'Title of your push notification',
+						// 		body: 'Body of your push notification'
+						// 	}
+						// };
 
-					//callback style
-					// fcm.send(fcmmessage, function(err, response){
-					// 	if (err) {
-					// 		console.log(err);
-					// 		console.log("Something has gone wrong!");
-					// 	} else {
-					// 		console.log(response)
-					// 		console.log("Successfully sent with response: ", response);
+						//callback style
+						// fcm.send(fcmmessage, function(err, response){
+						// 	if (err) {
+						// 		console.log(err);
+						// 		console.log("Something has gone wrong!");
+						// 	} else {
+						// 		console.log(response)
+						// 		console.log("Successfully sent with response: ", response);
 
 
+						// 	}
+						// });
+
+					// 	nexmo.message.sendSms(
+					// 		'+923328287820', '+923328287820', text, { type: 'unicode' },
+					// 		(err, responseData) => {
+					// 			if(err) {
+					// 			console.log(err);
+					// 			res.json({
+					// 				"payload": {
+					// 					"google": {
+					// 						"expectUserResponse": true,
+					// 						"richResponse": {
+					// 						"items": [
+					// 							{
+					// 							"simpleResponse": {
+					// 								"textToSpeech": "Messsage sending failed"
+					// 							}
+					// 							}
+					// 						]
+					// 						}
+					// 					}
+					// 				}
+					// 				});
+					// 			} else {
+					// 			const data = {
+					// 				id: responseData.messages[0]['message-id'],
+					// 				number: responseData.messages[0]['to']
+					// 			}
+
+					// 			// Emit to the client
+					// 			res.json({
+					// 				"payload": {
+					// 					"google": {
+					// 						"expectUserResponse": true,
+					// 						"richResponse": {
+					// 						"items": [
+					// 							{
+					// 							"simpleResponse": {
+					// 								"textToSpeech": "Message send to your mommy"
+					// 							}
+					// 							}
+					// 						]
+					// 						}
+					// 					}
+					// 				}
+					// 				});
+					// 			}
+					// 		});
+
+					// }).catch((err)=>{res.json({
+					// 	"payload": {
+					// 		"google": {
+					// 			"expectUserResponse": true,
+					// 			"richResponse": {
+					// 			"items": [
+					// 				{
+					// 				"simpleResponse": {
+					// 					"textToSpeech": "Sorry I couldn't get that"
+					// 				}
+					// 				}
+					// 			]
+					// 			}
+					// 		}
 					// 	}
 					// });
+				});
 
-				// 	nexmo.message.sendSms(
-				// 		'+923328287820', '+923328287820', text, { type: 'unicode' },
-				// 		(err, responseData) => {
-				// 			if(err) {
-				// 			console.log(err);
-				// 			res.json({
-				// 				"payload": {
-				// 					"google": {
-				// 						"expectUserResponse": true,
-				// 						"richResponse": {
-				// 						"items": [
-				// 							{
-				// 							"simpleResponse": {
-				// 								"textToSpeech": "Messsage sending failed"
-				// 							}
-				// 							}
-				// 						]
-				// 						}
-				// 					}
-				// 				}
-				// 				});
-				// 			} else {
-				// 			const data = {
-				// 				id: responseData.messages[0]['message-id'],
-				// 				number: responseData.messages[0]['to']
-				// 			}
 
-				// 			// Emit to the client
-				// 			res.json({
-				// 				"payload": {
-				// 					"google": {
-				// 						"expectUserResponse": true,
-				// 						"richResponse": {
-				// 						"items": [
-				// 							{
-				// 							"simpleResponse": {
-				// 								"textToSpeech": "Message send to your mommy"
-				// 							}
-				// 							}
-				// 						]
-				// 						}
-				// 					}
-				// 				}
-				// 				});
-				// 			}
-				// 		});
-
-				// }).catch((err)=>{res.json({
-				// 	"payload": {
-				// 		"google": {
-				// 			"expectUserResponse": true,
-				// 			"richResponse": {
-				// 			"items": [
-				// 				{
-				// 				"simpleResponse": {
-				// 					"textToSpeech": "Sorry I couldn't get that"
-				// 				}
-				// 				}
-				// 			]
-				// 			}
-				// 		}
-				// 	}
-				// });
-			});
-
+					});
 
 			break;
 
