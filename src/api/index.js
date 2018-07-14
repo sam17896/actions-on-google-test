@@ -90,10 +90,11 @@ export default ({ config, db }) => {
 			case MOTHER_NUMBER:
 
 			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
+			console.log(user_id);
 			var number = {
 				key : req.body.queryResult.queryText
 			}
-			admin.database().ref("/users").push(user_id).set(number,()=>{
+			admin.database().ref("/users").child(user_id).set(number,()=>{
 				res.json({
 					"payload": {
 						"google": {
