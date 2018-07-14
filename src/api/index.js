@@ -13,11 +13,13 @@ const QUIT_INTENT = "exit";
 const ASK_LOCATION_INTENT = "ask_for_location";
 const RECEIVE_LOCATION_INTENT = "receive_location";
 const SEND_MESSAGE = "ReceiveLocation.ReceiveLocation-fallback";
+const MOTHER_NUMBER = "mother_number";
 
 const nexmo_api_key = "7808403f";
 const nexmo_api_secret = "E7ip83joCxndITIE";
 const KEY = "lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24";
 const FIREBASE_SERVER_KEY = "AAAAelN9KZg:APA91bESCJDTDIccuL2NMuT7paizbTDV5ByO1qZIlpOBf4ReujMQqF6g0BglhPuq0UYOL7PwGey0YcjXryJK0zWJ4GqqpTb-umM7ykOqD92iMQzRLnW79rY3H9jzp1pmsjLRY-N12BrNALTVlXSseQ2CAxdntLDP3Q";
+
 admin.initializeApp({
 	credential: admin.credential.cert({
 	  projectId: 'mommy-i-am-lost',
@@ -81,6 +83,33 @@ export default ({ config, db }) => {
 						}
 					});
 				}
+			});
+
+			break;
+
+			case MOTHER_NUMBER:
+
+			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
+			var number = {
+				key : req.body.queryResult.queryText
+			}
+			admin.database().ref("/users").push(user_id).set(number,()=>{
+				res.json({
+					"payload": {
+						"google": {
+						  "expectUserResponse": true,
+						  "richResponse": {
+							"items": [
+							  {
+								"simpleResponse": {
+								  "textToSpeech": "Number set against your device"
+								}
+							  }
+							]
+						  }
+						}
+					}
+				});
 			});
 
 			break;
