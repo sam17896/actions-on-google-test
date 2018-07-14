@@ -44,20 +44,42 @@ export default ({ config, db }) => {
 
 		switch(req.body.queryResult.action){
 			case DEFAULT_INTENT:
-			res.json({
-				"payload": {
-					"google": {
-					  "expectUserResponse": true,
-					  "richResponse": {
-						"items": [
-						  {
-							"simpleResponse": {
-							  "textToSpeech": "Hello"
+			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
+			admin.database().ref("/users").equalTo(user_id).on("value", function(snapshot) {
+				if(snapshot.exists()){
+					res.json({
+						"payload": {
+							"google": {
+							  "expectUserResponse": true,
+							  "richResponse": {
+								"items": [
+								  {
+									"simpleResponse": {
+									  "textToSpeech": "Hello"
+									}
+								  }
+								]
+							  }
 							}
-						  }
-						]
-					  }
-					}
+						}
+					});
+				} else {
+					res.json({
+						"payload": {
+							"google": {
+							  "expectUserResponse": true,
+							  "richResponse": {
+								"items": [
+								  {
+									"simpleResponse": {
+									  "textToSpeech": "Please enter your mother's number!"
+									}
+								  }
+								]
+							  }
+							}
+						}
+					});
 				}
 			});
 
