@@ -5,7 +5,6 @@ import Nexmo from 'nexmo';
 import axios from 'axios';
 import * as admin from 'firebase-admin';
 import FCM  from 'fcm-push';
-import { values } from 'actions-on-google/dist/common';
 
 
 
@@ -19,15 +18,15 @@ const MOTHER_NUMBER = "mother_number";
 const nexmo_api_key = "7808403f";
 const nexmo_api_secret = "E7ip83joCxndITIE";
 const KEY = "lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24";
-const FIREBASE_SERVER_KEY = "AAAAelN9KZg:APA91bESCJDTDIccuL2NMuT7paizbTDV5ByO1qZIlpOBf4ReujMQqF6g0BglhPuq0UYOL7PwGey0YcjXryJK0zWJ4GqqpTb-umM7ykOqD92iMQzRLnW79rY3H9jzp1pmsjLRY-N12BrNALTVlXSseQ2CAxdntLDP3Q";
+const FIREBASE_SERVER_KEY = "AAAAwaF24Lc:APA91bEUxkZhBdvqFtx8pXB4yJJsdQOrFP7jIgNSQt3UcabFDLmCRa-ScyzKADkSVPUnPlBS_nqUCW2w4wbhCzesTHwFnGF7ZLNDL3O-cxRMhWtXNRoBMivz8djusuqqJq7I3AdDWp57sfla8prc8J5zj7KO_x6AxA";
 
 admin.initializeApp({
 	credential: admin.credential.cert({
-	  projectId: 'mommy-i-am-lost',
-	  clientEmail: 'firebase-adminsdk-nnl8b@mommy-i-am-lost.iam.gserviceaccount.com',
-	  private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC5jV+KK0X+SeKv\nm3Zad/zAKLPLUrxSWCq6ulIjKepTB675YRPoLK2hRAVU3dMB8zHw/SB8JUF+KNG1\nKjjFHdHufv9i8A1LGBo8GUADS7wM4hixp4NgjDGUQ0MbhV9NI29eS7XiHw/Yvq7l\nNOB5dS3VM5u//N7hVSMkkKPbB13xGY3LxmY3aNdk+HdJt1a+c7Ei08OO4VPux3ZW\nsHQBM3NDz4Ma654EEZk22CUlfSBXJwoX76/MtzNEbc3ENjLi6Ikic27POw8AMWun\nu3EsH5RAyUTf9DM9LmeO5Gneoipwdp+kmn50PTBKX7iVABtyFL7RKEqJXxiWuf0G\nYeL3CCdFAgMBAAECggEAJkmvB3iG9KIj4dcbPK9KKw+rC/9KR1aUmJvWU5W0WcY5\n25El1bCUcnSyAfFU92/KpB7jW2KnqUP8g9zOwpP06/juM2jz4UU7sp+GNzfjOahU\n7qGxiRRcraqUeCMVB3qSojtOsHZ242NzfO3kjQN6PeZsktj317jk68hh21Ihlxx0\nCscoEK9kTj51PxxK1J+ZEuVppQX5yLOU1WJWo/v7cYzU1xmzYLyaKe1ts6eMDrSk\nel1quhtnfgh+OmUnFfG1SstkKP4nbftTqxr4XecwOPT6iuVNjZ+hIvf6ZZ3y4EMz\nmmbzYU/I53foP/ga3kMMEP+LpXZOXlvE6KWsRUzaeQKBgQDggXeGMOh2whGhs3ch\ng8GsRgYLe3HU1+2q1+XtYur33sdB7dG8lnQYVPxSFUDk8hC8G8bxfboZ72vc1otk\n2cqQQRAjmUS0hCRw8hBoTU1tD8Q056x2b6UCIbCkYD8pgw1RHXByF7QDMuweg13V\nnrgnSrS2FGRo9DOXPTy/OdWzKQKBgQDTlP58TaIUFFKcGoQ5z+CgZPvvzuCACYMb\nfavErhtJgf/9JEnJ++8fou19IKI796ur0WNTjhhj0cmOjKa/1gS6k2kFZdc5VIiQ\nN9qzqtA9HpsvVJLJs1kLCq1PyG0hqde65v+I6d3mTSy9yb+jBuzDmB7whRcCVDss\nOY1Qn5oSvQKBgEZgT1eBfV28+En4OCAJbWzThpGS4NwX1Cj6BNmlaILLEytXoae8\ngigee/o/L1iViSlui66n+u6mXumbV5cFrroJq0V9hkwQIFxHhV0s3liR2K+88BMw\nbEl+xiDBCwu4STRkRht90rAuBlaKV5/fYVrv0DZDrjY4VvPR/njzaEoBAoGBALDY\nEtDgrnyr89RIEYakqnJFlZH9zwUVbkD3DC+q+mG5R7ZUs1wgt+AwdOGl+hO3UgSd\nUbDPzrD38siz5Nfo0TEE7r21PmvLrQ0lsiWDuuOrBjhMLxhpUB57gRpzQkvlwsuU\nMbdFCdRpYuEKlKN1sUVWi12rT+0BbCftvqDJlaTdAoGAaYBwkc+8OgReI/3Y8MpC\nAkZlo0SD63j1snFNCCbWNlo06ItQM4xS47AFlbPTTYfA4ogwINWOMTwoVzHRzZy3\nlHSpIPha/N2m/BiqcLFlKmoEYUawoM8DDEVJmjx/aSDry3k35WrpKr+XI2CCJDEK\njlHz62hjshysNWRsZ6qbnGs=\n-----END PRIVATE KEY-----\n",
+	  projectId: 'childsupport-2225',
+	  client_email: "firebase-adminsdk-yl6nc@childsupport-22258.iam.gserviceaccount.com",
+		private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCK3WFJA0/FtlSJ\nzd0Qy550bwJI80uwdCLrU5C6OftmDYXZryU5L6cXaxtEFLDeN4fbl/cajue4C9mN\nHlOWIX/x03ItS9ZfLd7xQ3YpRkL+CwNN0hHFb0sj0QJ0v7LIn0mmceJqB3y1G7VM\nNNw1xa6HXz4BBZ6zb5Ak6/LIRvYNhEDtZSzBdnTD6DjkO1pUKKwKWnrDQagCrZID\ncToa+Lp9ooKI1BvDwaQ28zVcly99GT9+iviNH85ye9lH4Luhz3Cl4mPMX/7YB2sr\n9IzGPPEAeb6DEeaWwufRpr9nJ/jV8SC8JRoNhR4KFUFKXRH8hLYdhgagLglo8gdD\nAd8PW7DnAgMBAAECggEACPmP4mkoDGOMCTADRqTyWRzHmAa+xekWTKv6TEmXuZvM\nIn/oYaQhIilWT3XK4ex9h7Aa/14XFH+85XBSqf8A8ZSJ6kA0MF3wQnBAFct9uZo6\nnMVOnWUOWoKVVw2rX2i0GOF+vFLpjhxRVls1lErHdzus7+H4xNNuty7XYnb7oMSV\nZ84nSZ+or3gKg5Lhz/pczs8CWq6PSXbtM6RbD2YQShlFKPrdjtSTTVdpv8283T/0\n8S7fu7UcbgOdtvVIYKQJByUf/W1yvfi2e4zv6zk7G0tyrOBAdaIUOZIcuhOQwIpZ\nbLxYQZYNcHGHf8owDiPzoknYTH42DRgxgtJCG9ooAQKBgQC9BXho1mAwhqWyxVwx\n8yUsZPfVFiZMa0/JmFy0YbfIwOSFgDOy0F5afDWltBOqOUG+laJda4ufYSD3q1pF\nHFuMKiE1TNfBKPNLfNsmQ5rJ11/gmonzWRK7O4QJNyCx+cv564tmzrGGTWk8VeCE\nC5YntnDL5qWzpifoGbdZCdzs5wKBgQC8EhkFcqKRQExgY7ptfU8KUsavKeYSjydj\nP8Wlq6W8PSQ3M4luRIJdqMRYUr3Ip8dVpaam3Ivvieh8hcKPObKRWTwQ/ZoUlH+J\ndOlIXJFfCPRGh24P2xRUk/rNyarLjsbjinwbCzFfYLSlPY5ks6qTbLw6Pa6e2ob/\naOMTe46cAQKBgQCKfkGU/s2HgIBTlctRRceM2YXEePAiudXB7YKvH5Ha44oMTryS\nXZ1kSvG7sU9fP4huLZDDRhMM+ct/6+q+DGL/NbcTKHREsM5iFt8zEAGPteAn3tMI\nm9DfomHBpsSr4kyTlwOSlgr4Tiu2620PErY37rKCk0IBeNJwercd494dLQKBgQCG\nU8LNUlBswGkM2443T64ZqH/CcoGitd6jE9R+fPfWWDE6wDOjr4kRjk4W65oj7DoC\noVtDiPjl8TE9Z2hMViCFkh/F3uyjUGE7c2Z/yaYHI+UdTvO8nXSK6FrVivnThDno\nIWx9AGSWRAMilrHSmUT3IU3bp1zGlzyexnKR4sk8AQKBgGxGFBMgN2AzjZtlmEhD\nuFknjVsJ+fY5AKe3j1odtO7wzVxOgkEXH6GhnG1PzfoiF2nszTtcfdEdwc2sINyf\n3BTslZTdslBQVL/RUIXEPujmncOiFIWVO/fben4yM6bKfIXj3GnCIUCuHomjbbZx\nJ7CfPPagVNGg3lJ/JB9nAvS+\n-----END PRIVATE KEY-----\n",
 	}),
-	databaseURL: "https://mommy-i-am-lost.firebaseio.com"
+	databaseURL: "https://childsupport-22258.firebaseio.com/"
   });
   var fcm = new FCM(FIREBASE_SERVER_KEY);
 export default ({ config, db }) => {
