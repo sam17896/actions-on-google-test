@@ -190,7 +190,7 @@ export default ({ config, db }) => {
 				axios.get(url).then((resp)=>{
 					console.log(resp.data.results[0].locations[0].postalCode)
 					text = "Zip Code: " +  resp.data.results[0].locations[0].postalCode + " he said: " + req.body.queryResult.queryText;
-					admin.database().ref('/users/' + "ABwppHHHGlEs8drH2p3CuY6r9VtvR9DesWi-6b5UKDcaCcfESAZSzQyzjdRP95HG_HWJApGD55g9XxrKYTwP")
+					admin.database().ref('/users/' +req.body.originalDetectIntentRequest.payload.user.userId)
 					.on("value", function(snapshot){
 						var number = snapshot.val().key;
 						var Message = {
