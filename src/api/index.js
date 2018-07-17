@@ -46,6 +46,7 @@ export default ({ config, db }) => {
 		switch(req.body.queryResult.action){
 			case DEFAULT_INTENT:
 			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
+			console.log(user_id)
 			admin.database().ref("/users/" + user_id).once("value", function(snapshot) {
 				if(snapshot.exists()){
 					res.json({
