@@ -23,15 +23,6 @@ admin.initializeApp({
 	databaseURL: "https://childsupport-22258.firebaseio.com/"
   });
 
-
-// admin.initializeApp({
-// 		credential: admin.credential.cert({
-// 			project_id: "mommy-i-am-lost",
-// 			client_email: "firebase-adminsdk-nnl8b@mommy-i-am-lost.iam.gserviceaccount.com",
-// 			private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC5jV+KK0X+SeKv\nm3Zad/zAKLPLUrxSWCq6ulIjKepTB675YRPoLK2hRAVU3dMB8zHw/SB8JUF+KNG1\nKjjFHdHufv9i8A1LGBo8GUADS7wM4hixp4NgjDGUQ0MbhV9NI29eS7XiHw/Yvq7l\nNOB5dS3VM5u//N7hVSMkkKPbB13xGY3LxmY3aNdk+HdJt1a+c7Ei08OO4VPux3ZW\nsHQBM3NDz4Ma654EEZk22CUlfSBXJwoX76/MtzNEbc3ENjLi6Ikic27POw8AMWun\nu3EsH5RAyUTf9DM9LmeO5Gneoipwdp+kmn50PTBKX7iVABtyFL7RKEqJXxiWuf0G\nYeL3CCdFAgMBAAECggEAJkmvB3iG9KIj4dcbPK9KKw+rC/9KR1aUmJvWU5W0WcY5\n25El1bCUcnSyAfFU92/KpB7jW2KnqUP8g9zOwpP06/juM2jz4UU7sp+GNzfjOahU\n7qGxiRRcraqUeCMVB3qSojtOsHZ242NzfO3kjQN6PeZsktj317jk68hh21Ihlxx0\nCscoEK9kTj51PxxK1J+ZEuVppQX5yLOU1WJWo/v7cYzU1xmzYLyaKe1ts6eMDrSk\nel1quhtnfgh+OmUnFfG1SstkKP4nbftTqxr4XecwOPT6iuVNjZ+hIvf6ZZ3y4EMz\nmmbzYU/I53foP/ga3kMMEP+LpXZOXlvE6KWsRUzaeQKBgQDggXeGMOh2whGhs3ch\ng8GsRgYLe3HU1+2q1+XtYur33sdB7dG8lnQYVPxSFUDk8hC8G8bxfboZ72vc1otk\n2cqQQRAjmUS0hCRw8hBoTU1tD8Q056x2b6UCIbCkYD8pgw1RHXByF7QDMuweg13V\nnrgnSrS2FGRo9DOXPTy/OdWzKQKBgQDTlP58TaIUFFKcGoQ5z+CgZPvvzuCACYMb\nfavErhtJgf/9JEnJ++8fou19IKI796ur0WNTjhhj0cmOjKa/1gS6k2kFZdc5VIiQ\nN9qzqtA9HpsvVJLJs1kLCq1PyG0hqde65v+I6d3mTSy9yb+jBuzDmB7whRcCVDss\nOY1Qn5oSvQKBgEZgT1eBfV28+En4OCAJbWzThpGS4NwX1Cj6BNmlaILLEytXoae8\ngigee/o/L1iViSlui66n+u6mXumbV5cFrroJq0V9hkwQIFxHhV0s3liR2K+88BMw\nbEl+xiDBCwu4STRkRht90rAuBlaKV5/fYVrv0DZDrjY4VvPR/njzaEoBAoGBALDY\nEtDgrnyr89RIEYakqnJFlZH9zwUVbkD3DC+q+mG5R7ZUs1wgt+AwdOGl+hO3UgSd\nUbDPzrD38siz5Nfo0TEE7r21PmvLrQ0lsiWDuuOrBjhMLxhpUB57gRpzQkvlwsuU\nMbdFCdRpYuEKlKN1sUVWi12rT+0BbCftvqDJlaTdAoGAaYBwkc+8OgReI/3Y8MpC\nAkZlo0SD63j1snFNCCbWNlo06ItQM4xS47AFlbPTTYfA4ogwINWOMTwoVzHRzZy3\nlHSpIPha/N2m/BiqcLFlKmoEYUawoM8DDEVJmjx/aSDry3k35WrpKr+XI2CCJDEK\njlHz62hjshysNWRsZ6qbnGs=\n-----END PRIVATE KEY-----\n",
-// 		}),
-// 		databaseURL: "https://mommy-i-am-lost.firebaseio.com/"
-// 	  });
 export default ({ config, db }) => {
 	let api = Router();
 
@@ -48,7 +39,6 @@ export default ({ config, db }) => {
 		switch(req.body.queryResult.action){
 			case DEFAULT_INTENT:
 			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
-			console.log(user_id)
 			admin.database().ref("/users/" + user_id).once("value", function(snapshot) {
 				if(snapshot.exists()){
 					res.json({
@@ -179,9 +169,6 @@ export default ({ config, db }) => {
 
 				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
 
-			//	 var latitute = "37.4219806";
-		//		 var longitde = "-122.0841979";
-
 
 				var url = "https://www.mapquestapi.com/geocoding/v1/reverse?key=" + KEY+ "&location=" + latitute + "%2C" + longitde + "&outFormat=json&thumbMaps=false";
 				axios.get(url).then((resp)=>{
@@ -227,93 +214,6 @@ export default ({ config, db }) => {
 							.catch((error) => {
 								console.log('Error sending message:', error);
 							});
-						//console.log(admin.database().ref('/message'));
-						// var fcmmessage = {
-						// 	to: 'childlost', // required fill with device token or topics
-						// 	collapse_key: 'your_collapse_key',
-						// 	data: Message,
-						// 	notification: {
-						// 		title: 'Title of your push notification',
-						// 		body: 'Body of your push notification'
-						// 	}
-						// };
-
-						//callback style
-						// fcm.send(fcmmessage, function(err, response){
-						// 	if (err) {
-						// 		console.log(err);
-						// 		console.log("Something has gone wrong!");
-						// 	} else {
-						// 		console.log(response)
-						// 		console.log("Successfully sent with response: ", response);
-
-
-						// 	}
-						// });
-
-					// 	nexmo.message.sendSms(
-					// 		'+923328287820', '+923328287820', text, { type: 'unicode' },
-					// 		(err, responseData) => {
-					// 			if(err) {
-					// 			console.log(err);
-					// 			res.json({
-					// 				"payload": {
-					// 					"google": {
-					// 						"expectUserResponse": true,
-					// 						"richResponse": {
-					// 						"items": [
-					// 							{
-					// 							"simpleResponse": {
-					// 								"textToSpeech": "Messsage sending failed"
-					// 							}
-					// 							}
-					// 						]
-					// 						}
-					// 					}
-					// 				}
-					// 				});
-					// 			} else {
-					// 			const data = {
-					// 				id: responseData.messages[0]['message-id'],
-					// 				number: responseData.messages[0]['to']
-					// 			}
-
-					// 			// Emit to the client
-					// 			res.json({
-					// 				"payload": {
-					// 					"google": {
-					// 						"expectUserResponse": true,
-					// 						"richResponse": {
-					// 						"items": [
-					// 							{
-					// 							"simpleResponse": {
-					// 								"textToSpeech": "Message send to your mommy"
-					// 							}
-					// 							}
-					// 						]
-					// 						}
-					// 					}
-					// 				}
-					// 				});
-					// 			}
-					// 		});
-
-					// }).catch((err)=>{res.json({
-					// 	"payload": {
-					// 		"google": {
-					// 			"expectUserResponse": true,
-					// 			"richResponse": {
-					// 			"items": [
-					// 				{
-					// 				"simpleResponse": {
-					// 					"textToSpeech": "Sorry I couldn't get that"
-					// 				}
-					// 				}
-					// 			]
-					// 			}
-					// 		}
-					// 	}
-					// });
 				});
 
 
