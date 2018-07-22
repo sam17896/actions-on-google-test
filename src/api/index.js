@@ -10,7 +10,6 @@ const DEFAULT_INTENT = "welcome";
 const QUIT_INTENT = "exit";
 const ASK_LOCATION_INTENT = "ask_for_location";
 const RECEIVE_LOCATION_INTENT = "receive_location";
-const SEND_MESSAGE = "ReceiveLocation.ReceiveLocation-fallback";
 const MOTHER_NUMBER = "mother_number";
 
 const KEY = "lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24";
@@ -148,23 +147,6 @@ export default ({ config, db }) => {
 			case RECEIVE_LOCATION_INTENT:
 			//	res.json(text);
 
-			res.json({"payload": {
-				"google": {
-					"expectUserResponse": true,
-					"richResponse": {
-					"items": [
-						{
-						"simpleResponse": {
-							"textToSpeech": "Where are you?"
-						}
-						}
-					]
-					}
-				}
-			}});
-			break;
-
-			case SEND_MESSAGE:
 				var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
 
 				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
@@ -179,7 +161,6 @@ export default ({ config, db }) => {
 							latitude : "" + latitute,
 							longitude :"" + longitde,
 							zipcode : "" + resp.data.results[0].locations[0].postalCode,
-							message: "" + req.body.queryResult.queryText,
 							to: "" + number
 						}
 
@@ -219,7 +200,79 @@ export default ({ config, db }) => {
 
 					});
 
+
+			// res.json({"payload": {
+			// 	"google": {
+			// 		"expectUserResponse": true,
+			// 		"richResponse": {
+			// 		"items": [
+			// 			{
+			// 			"simpleResponse": {
+			// 				"textToSpeech": "Where are you?"
+			// 			}
+			// 			}
+			// 		]
+			// 		}
+			// 	}
+			// }});
 			break;
+
+			// case SEND_MESSAGE:
+			// 	var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
+
+			// 	var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
+
+
+			// 	var url = "https://www.mapquestapi.com/geocoding/v1/reverse?key=" + KEY+ "&location=" + latitute + "%2C" + longitde + "&outFormat=json&thumbMaps=false";
+			// 	axios.get(url).then((resp)=>{
+			// 		admin.database().ref('/users/' +req.body.originalDetectIntentRequest.payload.user.userId)
+			// 		.on("value", function(snapshot){
+			// 			var number = snapshot.val().key;
+			// 			var Message = {
+			// 				latitude : "" + latitute,
+			// 				longitude :"" + longitde,
+			// 				zipcode : "" + resp.data.results[0].locations[0].postalCode,
+			// 				message: "" + req.body.queryResult.queryText,
+			// 				to: "" + number
+			// 			}
+
+			// 			admin.database().ref('/message').set(Message);
+			// 			var topic = 'childlost';
+			// 			var fcmmessage = {
+			// 				data: Message,
+			// 				topic: topic
+			// 				};
+
+			// 			  admin.messaging().send(fcmmessage)
+			// 				.then((response) => {
+			// 					// Response is a message ID string.
+			// 					res.json({
+			// 						"payload": {
+			// 							"google": {
+			// 								"expectUserResponse": true,
+			// 								"richResponse": {
+			// 								"items": [
+			// 									{
+			// 									"simpleResponse": {
+			// 										"textToSpeech": "Message send to your mommy"
+			// 									}
+			// 									}
+			// 								]
+			// 								}
+			// 							}
+			// 						}
+			// 						});
+			// 					console.log('Successfully sent message:', response);
+			// 				})
+			// 				.catch((error) => {
+			// 					console.log('Error sending message:', error);
+			// 				});
+			// 	});
+
+
+			// 		});
+
+			// break;
 
 			default:
 					res.json({
