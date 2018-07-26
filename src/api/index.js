@@ -8,7 +8,7 @@ import * as admin from 'firebase-admin';
 
 const DEFAULT_INTENT = "welcome";
 const QUIT_INTENT = "exit";
-const ASK_LOCATION_INTENT = "ask_for_location";
+const SEND_MESSAGE = "send_message";
 const RECEIVE_LOCATION_INTENT = "receive_location";
 const MOTHER_NUMBER = "mother_number";
 
@@ -43,19 +43,22 @@ export default ({ config, db }) => {
 					res.json({
 						"payload": {
 							"google": {
-							  "expectUserResponse": true,
-							  "richResponse": {
-								"items": [
-								  {
-									"simpleResponse": {
-									  "textToSpeech": "Hello"
-									}
-								  }
+							"expectUserResponse": true,
+							"systemIntent": {
+								"intent": "actions.intent.PERMISSION",
+								"data": {
+								"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+								"optContext": "To inform your mummy",
+								"permissions": [
+									"NAME",
+									"DEVICE_PRECISE_LOCATION",
+									"DEVICE_COARSE_LOCATION"
 								]
-							  }
+								}
+							}
 							}
 						}
-					});
+						});
 				} else {
 					res.json({
 						"payload": {
@@ -87,19 +90,22 @@ export default ({ config, db }) => {
 				res.json({
 					"payload": {
 						"google": {
-						  "expectUserResponse": true,
-						  "richResponse": {
-							"items": [
-							  {
-								"simpleResponse": {
-								  "textToSpeech": "Number set against your device"
-								}
-							  }
+						"expectUserResponse": true,
+						"systemIntent": {
+							"intent": "actions.intent.PERMISSION",
+							"data": {
+							"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
+							"optContext": "To inform your mummy",
+							"permissions": [
+								"NAME",
+								"DEVICE_PRECISE_LOCATION",
+								"DEVICE_COARSE_LOCATION"
 							]
-						  }
+							}
+						}
 						}
 					}
-				});
+					});
 			});
 
 			break;
@@ -122,29 +128,26 @@ export default ({ config, db }) => {
 				}
 			});
 			break;
-			case ASK_LOCATION_INTENT:
+			case RECEIVE_LOCATION_INTENT:
 				res.json({
 					"payload": {
 						"google": {
-						"expectUserResponse": true,
-						"systemIntent": {
-							"intent": "actions.intent.PERMISSION",
-							"data": {
-							"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-							"optContext": "To inform your mummy",
-							"permissions": [
-								"NAME",
-								"DEVICE_PRECISE_LOCATION",
-								"DEVICE_COARSE_LOCATION"
+							"expectUserResponse": true,
+							"richResponse": {
+							"items": [
+								{
+								"simpleResponse": {
+									"textToSpeech": "Permission granted!"
+								}
+								}
 							]
 							}
-						}
 						}
 					}
 					})
 			break;
 
-			case RECEIVE_LOCATION_INTENT:
+			case SEND_MESSAGE:
 			//	res.json(text);
 
 				var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
