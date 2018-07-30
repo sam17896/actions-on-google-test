@@ -9,7 +9,6 @@ import * as admin from 'firebase-admin';
 const DEFAULT_INTENT = "welcome";
 const QUIT_INTENT = "exit";
 const SEND_MESSAGE = "send_message";
-const RECEIVE_LOCATION_INTENT = "receive_location";
 const MOTHER_NUMBER = "mother_number";
 
 const KEY = "lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24";
@@ -43,22 +42,19 @@ export default ({ config, db }) => {
 					res.json({
 						"payload": {
 							"google": {
-							"expectUserResponse": true,
-							"systemIntent": {
-								"intent": "actions.intent.PERMISSION",
-								"data": {
-								"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-								"optContext": "To inform your mummy",
-								"permissions": [
-									"NAME",
-									"DEVICE_PRECISE_LOCATION",
-									"DEVICE_COARSE_LOCATION"
+							  "expectUserResponse": true,
+							  "richResponse": {
+								"items": [
+								  {
+									"simpleResponse": {
+									  "textToSpeech": "Hello there!"
+									}
+								  }
 								]
-								}
-							}
+							  }
 							}
 						}
-						});
+					});
 				} else {
 					res.json({
 						"payload": {
@@ -90,22 +86,19 @@ export default ({ config, db }) => {
 				res.json({
 					"payload": {
 						"google": {
-						"expectUserResponse": true,
-						"systemIntent": {
-							"intent": "actions.intent.PERMISSION",
-							"data": {
-							"@type": "type.googleapis.com/google.actions.v2.PermissionValueSpec",
-							"optContext": "To inform your mummy",
-							"permissions": [
-								"NAME",
-								"DEVICE_PRECISE_LOCATION",
-								"DEVICE_COARSE_LOCATION"
+						  "expectUserResponse": true,
+						  "richResponse": {
+							"items": [
+							  {
+								"simpleResponse": {
+								  "textToSpeech": "Number is set against your device!"
+								}
+							  }
 							]
-							}
-						}
+						  }
 						}
 					}
-					});
+				});
 			});
 
 			break;
@@ -148,22 +141,14 @@ export default ({ config, db }) => {
 			break;
 
 			case SEND_MESSAGE:
-			//	res.json(text);
 
-				var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
-
-				var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
-
-
-				var url = "https://www.mapquestapi.com/geocoding/v1/reverse?key=" + KEY+ "&location=" + latitute + "%2C" + longitde + "&outFormat=json&thumbMaps=false";
-				axios.get(url).then((resp)=>{
-					admin.database().ref('/users/' +req.body.originalDetectIntentRequest.payload.user.userId)
+				admin.database().ref('/users/' + req.body.originalDetectIntentRequest.payload.user.userId)
 					.on("value", function(snapshot){
 						var number = snapshot.val().key;
 						var Message = {
-							latitude : "" + latitute,
-							longitude :"" + longitde,
-							zipcode : "" + resp.data.results[0].locations[0].postalCode,
+							latitude : "" ,
+							longitude :"",
+							zipcode : "",
 							to: "" + number
 						}
 
@@ -199,25 +184,6 @@ export default ({ config, db }) => {
 								console.log('Error sending message:', error);
 							});
 				});
-
-
-					});
-
-
-			// res.json({"payload": {
-			// 	"google": {
-			// 		"expectUserResponse": true,
-			// 		"richResponse": {
-			// 		"items": [
-			// 			{
-			// 			"simpleResponse": {
-			// 				"textToSpeech": "Where are you?"
-			// 			}
-			// 			}
-			// 		]
-			// 		}
-			// 	}
-			// }});
 			break;
 
 			// case SEND_MESSAGE:
