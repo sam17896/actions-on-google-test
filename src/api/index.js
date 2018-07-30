@@ -121,24 +121,24 @@ export default ({ config, db }) => {
 				}
 			});
 			break;
-			case RECEIVE_LOCATION_INTENT:
-				res.json({
-					"payload": {
-						"google": {
-							"expectUserResponse": true,
-							"richResponse": {
-							"items": [
-								{
-								"simpleResponse": {
-									"textToSpeech": "Permission granted!"
-								}
-								}
-							]
-							}
-						}
-					}
-					})
-			break;
+			// case RECEIVE_LOCATION_INTENT:
+			// 	res.json({
+			// 		"payload": {
+			// 			"google": {
+			// 				"expectUserResponse": true,
+			// 				"richResponse": {
+			// 				"items": [
+			// 					{
+			// 					"simpleResponse": {
+			// 						"textToSpeech": "Permission granted!"
+			// 					}
+			// 					}
+			// 				]
+			// 				}
+			// 			}
+			// 		}
+			// 		})
+			// break;
 
 			case SEND_MESSAGE:
 
