@@ -33,25 +33,24 @@ export default ({ config, db }) => {
 		res.json({ version });
 	});
 
-	var simpleTextResponse = {
-		payload: {
-			google: {
-				expectUserResponse: true,
-				richResponse: {
-				items: [
-					{
-					simpleResponse: {
-						textToSpeech: "Hello there!"
-					}
-					}
-				]
-				}
-			}
-		}
-	}
 
 	function buildResponse(text){
-		var response = simpleTextResponse;
+		var response = {
+			payload: {
+				google: {
+					expectUserResponse: true,
+					richResponse: {
+					items: [
+						{
+						simpleResponse: {
+							textToSpeech: "Hello there!"
+						}
+						}
+					]
+					}
+				}
+			}
+		};
 		response.payload.google.items[0].simpleResponse.textToSpeech = text;
 		return response;
 	}
