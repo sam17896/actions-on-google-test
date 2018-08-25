@@ -34,6 +34,9 @@ export default ({ config, db }) => {
 	});
 
 
+	api.post('/', (req,res )=>{
+
+
 	function buildResponse(text){
 		var response = {
 			payload: {
@@ -51,12 +54,11 @@ export default ({ config, db }) => {
 				}
 			}
 		};
+		console.log(response);
 		response.payload.google.items[0].simpleResponse.textToSpeech = text;
 		return response;
 	}
 
-	api.post('/', (req,res )=>{
-		console.log(req);
 
 		switch(req.body.queryResult.action){
 			case DEFAULT_INTENT:
