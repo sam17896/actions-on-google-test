@@ -12,6 +12,7 @@ const SEND_MESSAGE = "send_message";
 const MOTHER_NUMBER = "mother_number";
 
 const KEY = "lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24";
+
 admin.initializeApp({
 	credential: admin.credential.cert({
 	  projectId: 'childsupport-22258',
@@ -32,234 +33,51 @@ export default ({ config, db }) => {
 		res.json({ version });
 	});
 
+	var simpleTextResponse = {
+		payload: {
+			google: {
+				expectUserResponse: true,
+				richResponse: {
+				items: [
+					{
+					simpleResponse: {
+						textToSpeech: "Hello there!"
+					}
+					}
+				]
+				}
+			}
+		}
+	}
+
+	function buildResponse(text){
+		var response = simpleTextResponse;
+		response.payload.google.items[0].simpleResponse.textToSpeech = text;
+		return response;
+	}
+
 	api.post('/', (req,res )=>{
+		console.log(req);
 
 		switch(req.body.queryResult.action){
 			case DEFAULT_INTENT:
-			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
-			admin.database().ref("/users/" + user_id).once("value", function(snapshot) {
-				if(snapshot.exists()){
-					res.json({
-						"payload": {
-							"google": {
-							  "expectUserResponse": true,
-							  "richResponse": {
-								"items": [
-								  {
-									"simpleResponse": {
-									  "textToSpeech": "Hello there!"
-									}
-								  }
-								]
-							  }
-							}
-						}
-					});
-				} else {
-					res.json({
-						"payload": {
-							"google": {
-							  "expectUserResponse": true,
-							  "richResponse": {
-								"items": [
-								  {
-									"simpleResponse": {
-									  "textToSpeech": "Please enter your mother's number!"
-									}
-								  }
-								]
-							  }
-							}
-						}
-					});
-				}
-			});
+					res.json(buildResponse("Hello There!"));
 			break;
 
 			case MOTHER_NUMBER:
-
-			var user_id = req.body.originalDetectIntentRequest.payload.user.userId;
-			var number = {
-				key : req.body.queryResult.queryText
-			}
-			admin.database().ref("/users").child(user_id).set(number,()=>{
-				res.json({
-					"payload": {
-						"google": {
-						  "expectUserResponse": true,
-						  "richResponse": {
-							"items": [
-							  {
-								"simpleResponse": {
-								  "textToSpeech": "Number is set against your device!"
-								}
-							  }
-							]
-						  }
-						}
-					}
-				});
-			});
-
+				res.json(buildResponse("Number is set against your device!"));
 			break;
 
 			case QUIT_INTENT:
-			res.json({
-				"payload": {
-					"google": {
-					  "expectUserResponse": true,
-					  "richResponse": {
-						"items": [
-						  {
-							"simpleResponse": {
-							  "textToSpeech": "Bye"
-							}
-						  }
-						]
-					  }
-					}
-				}
-			});
+				res.json(buildResponse("Bye!"));
 			break;
-			// case RECEIVE_LOCATION_INTENT:
-			// 	res.json({
-			// 		"payload": {
-			// 			"google": {
-			// 				"expectUserResponse": true,
-			// 				"richResponse": {
-			// 				"items": [
-			// 					{
-			// 					"simpleResponse": {
-			// 						"textToSpeech": "Permission granted!"
-			// 					}
-			// 					}
-			// 				]
-			// 				}
-			// 			}
-			// 		}
-			// 		})
-			// break;
 
 			case SEND_MESSAGE:
-
-				admin.database().ref('/users/' + req.body.originalDetectIntentRequest.payload.user.userId)
-					.on("value", function(snapshot){
-						var number = snapshot.val().key;
-						var Message = {
-							latitude : "" ,
-							longitude :"",
-							zipcode : "",
-							to: "" + number
-						}
-
-						admin.database().ref('/message').set(Message);
-						var topic = 'childlost';
-						var fcmmessage = {
-							data: Message,
-							topic: topic
-							};
-
-						  admin.messaging().send(fcmmessage)
-							.then((response) => {
-								// Response is a message ID string.
-								res.json({
-									"payload": {
-										"google": {
-											"expectUserResponse": true,
-											"richResponse": {
-											"items": [
-												{
-												"simpleResponse": {
-													"textToSpeech": "Message send to your mommy"
-												}
-												}
-											]
-											}
-										}
-									}
-									});
-								console.log('Successfully sent message:', response);
-							})
-							.catch((error) => {
-								console.log('Error sending message:', error);
-							});
-				});
+				res.json(buildResponse("Message send to your mommy"));
 			break;
 
-			// case SEND_MESSAGE:
-			// 	var latitute = req.body.originalDetectIntentRequest.payload.device.location.coordinates.latitude;
-
-			// 	var longitde = req.body.originalDetectIntentRequest.payload.device.location.coordinates.longitude;
-
-
-			// 	var url = "https://www.mapquestapi.com/geocoding/v1/reverse?key=" + KEY+ "&location=" + latitute + "%2C" + longitde + "&outFormat=json&thumbMaps=false";
-			// 	axios.get(url).then((resp)=>{
-			// 		admin.database().ref('/users/' +req.body.originalDetectIntentRequest.payload.user.userId)
-			// 		.on("value", function(snapshot){
-			// 			var number = snapshot.val().key;
-			// 			var Message = {
-			// 				latitude : "" + latitute,
-			// 				longitude :"" + longitde,
-			// 				zipcode : "" + resp.data.results[0].locations[0].postalCode,
-			// 				message: "" + req.body.queryResult.queryText,
-			// 				to: "" + number
-			// 			}
-
-			// 			admin.database().ref('/message').set(Message);
-			// 			var topic = 'childlost';
-			// 			var fcmmessage = {
-			// 				data: Message,
-			// 				topic: topic
-			// 				};
-
-			// 			  admin.messaging().send(fcmmessage)
-			// 				.then((response) => {
-			// 					// Response is a message ID string.
-			// 					res.json({
-			// 						"payload": {
-			// 							"google": {
-			// 								"expectUserResponse": true,
-			// 								"richResponse": {
-			// 								"items": [
-			// 									{
-			// 									"simpleResponse": {
-			// 										"textToSpeech": "Message send to your mommy"
-			// 									}
-			// 									}
-			// 								]
-			// 								}
-			// 							}
-			// 						}
-			// 						});
-			// 					console.log('Successfully sent message:', response);
-			// 				})
-			// 				.catch((error) => {
-			// 					console.log('Error sending message:', error);
-			// 				});
-			// 	});
-
-
-			// 		});
-
-			// break;
-
 			default:
-					res.json({
-						"payload": {
-							"google": {
-								"expectUserResponse": true,
-								"richResponse": {
-								"items": [
-									{
-									"simpleResponse": {
-										"textToSpeech": "Sorry I couldn't get that"
-									}
-									}
-								]
-								}
-							}
-						}
-					});
+					res.json(buildResponse("Sorry! I couldn't get that"));
 			break;
 		}
 	});
